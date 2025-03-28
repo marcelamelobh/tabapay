@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+  <title>TABAPAY</title>
+  <style>
+  </style>
+</head>
+
+<body>
+  <script src="https://iframes.sandbox.tabapay.net/TabaPaySDK.js"></script>
+  <script>
+    const { element } = tabaPaySdk.createIframe({
+      cardNumberInput: { separator: "-" },
+      expirationDateInput: { placeholderText: "mm/yy" },
+      cscInput: { labelText: "CVV" },
+      buttons: {
+        submit: {
+          backgroundColorEnabled: "#FD7E14",
+          backgroundColorHover: "#aaf",
+          order: '1',
+        },
+        reset: {
+          backgroundColorEnabled: "#6c757d",
+          backgroundColorHover: "#9f9",
+          order: '2',
+        },
+        cancel: {
+          backgroundColorEnabled: "#f55",
+          backgroundColorHover: "#f88",
+          order: '3',
+        },
+      },
+      labelStyle: {
+        fontWeight: "300",
+      },
+      inputStyle: {
+        backgroundColor: "#ddd",
+      },
+      invalidStyle: {
+        textColor: "#000",
+      },
+      eventListeners: {
+        submit: (encryptedCardData) => {
+          if (event.data != "Close") {
+            if (event.data.slice(0, 7) == "Error: ") {
+              console.log('Error');
+            } else {
+              var asData = event.data.split("|");
+              if (asData.length == 3) {
+                // asData[ 0 ] contains the Last 4
+                // asData[ 1 ] contains the Expiration Date in YYYYMM Format
+                // asData[ 2 ] contains the Card Token
+                console.log('Success');
+                console.log(asData);
+              } else {
+                console.log('Error');
+              }
+            }
+          }
+        },
+        cancel: () => {
+          console.log('Exit');
+        },
+      },
+      clientId: "jQoqPG8QiQvhsDEST866tg",
+    });
+    document.body.appendChild(element);
+  </script>
+</body>
+
+</html>
